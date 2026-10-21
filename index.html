@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+<title>Operadores</title>
+<style>
+:root{
+  --radius-lg:20px;
+  --radius-md:14px;
+  --radius-sm:10px;
+  --header-h:76px;
+  --nav-h:76px;
+  --font-display:'Space Grotesk',system-ui,sans-serif;
+  --font-body:'Inter',system-ui,sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;}
+body{
+  margin:0;
+  font-family:var(--font-body);
+  background:var(--bg);
+  color:var(--text);
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  transition:background .3s ease,color .3s ease;
+}
+
+/* ===== THEMES ===== */
+[data-theme="dark"]{
+  --bg:#0e1116; --bg-alt:#151922; --card:#1a1f2a; --card-2:#20263280;
+  --text:#eef1f7; --text-dim:#9aa4b8; --border:#2a3140; --border-soft:#242b38;
+  --accent:#5ee7c3; --accent-2:#8b7cf6; --accent-3:#ff8a5c;
+  --success:#4fd18b; --warn:#f5b942; --danger:#ff6262; --info:#5ec8f5;
+  --shadow:0 10px 30px rgba(0,0,0,.45);
+  --header-bg:linear-gradient(135deg,#151922,#0e1116);
+  --nav-bg:#141822ee;
+}
+[data-theme="light"]{
+  --bg:#f4f6fb; --bg-alt:#ffffff; --card:#ffffff; --card-2:#eef1f8;
+  --text:#1b2130; --text-dim:#67728a; --border:#e2e6ef; --border-soft:#edf0f6;
+  --accent:#0ea472; --accent-2:#6a5bf0; --accent-3:#ee7b3b;
+  --success:#1f9d63; --warn:#c98a12; --danger:#e2453f; --info:#1c8fc9;
+  --shadow:0 10px 26px rgba(30,40,70,.10);
+  --header-bg:linear-gradient(135deg,#ffffff,#eef1f8);
+  --nav-bg:#ffffffee;
+}
+[data-theme="sand"]{
+  --bg:#f3ead9; --bg-alt:#faf3e6; --card:#fffaf0; --card-2:#efe2c8;
+  --text:#3d3020; --text-dim:#8a7860; --border:#e3d3ae; --border-soft:#ecdfc0;
+  --accent:#b5702f; --accent-2:#8f6a3e; --accent-3:#c1573a;
+  --success:#6f8f4a; --warn:#c98a12; --danger:#c1573a; --info:#4f7f8c;
+  --shadow:0 10px 26px rgba(90,65,20,.14);
+  --header-bg:linear-gradient(135deg,#faf3e6,#efe2c8);
+  --nav-bg:#faf3e6ee;
+}
+
+/* ===== HEADER ===== */
+header#topbar{
+  flex:0 0 var(--header-h);
+  height:var(--header-h);
+  background:var(--header-bg);
+  border-bottom:1px solid var(--border-soft);
+  display:flex;align-items:center;gap:12px;
+  padding:0 16px;
+  position:relative;z-index:20;
+}
+.logo-mark{
+  width:44px;height:44px;flex:0 0 44px;border-radius:13px;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 6px 16px rgba(0,0,0,.25);
+}
+.logo-mark svg{width:26px;height:26px;}
+.brand{display:flex;flex-direction:column;line-height:1.1;flex:1;min-width:0;}
+.brand h1{
+  font-family:var(--font-display);font-size:19px;font-weight:700;margin:0;
+  letter-spacing:.3px;color:var(--text);
+}
+.brand span{
+  font-size:10.5px;color:var(--text-dim);font-family:var(--font-mono);
+  letter-spacing:.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.theme-btn{
+  width:42px;height:42px;border-radius:12px;border:1px solid var(--border);
+  background:var(--card);display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--text);flex:0 0 42px;transition:transform .15s ease;
+}
+.theme-btn:active{transform:scale(.9);}
+.theme-btn svg{width:20px;height:20px;}
+
+/* ===== MAIN ===== */
+main{flex:1 1 auto;min-height:0;position:relative;}
+.tab{
+  display:none;
+  height:100%;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  padding:16px 14px calc(var(--nav-h) + 34px) 14px;
+}
+.tab.active{display:block;}
+
+/* ===== NAV ===== */
+nav#bottomnav{
+  flex:0 0 var(--nav-h);height:var(--nav-h);
+  background:var(--nav-bg);
+  backdrop-filter:blur(14px);
+  border-top:1px solid var(--border-soft);
+  display:flex;position:relative;z-index:20;
+  padding-bottom:env(safe-area-inset-bottom);
+}
+.nav-btn{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:3px;background:none;border:none;color:var(--text-dim);cursor:pointer;
+  font-family:var(--font-body);font-size:10.5px;font-weight:600;padding:6px 2px;
+  transition:color .2s ease;position:relative;
+}
+.nav-btn svg{width:21px;height:21px;transition:transform .2s ease;}
+.nav-btn.active{color:var(--accent);}
+.nav-btn.active svg{transform:translateY(-2px);}
+.nav-btn.active::before{
+  content:'';position:absolute;top:0;width:26px;height:3px;border-radius:0 0 4px 4px;
+  background:var(--accent);
+}
+
+/* ===== SECTION HEAD ===== */
+.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:10px;}
+.section-title{font-family:var(--font-display);font-size:20px;font-weight:700;margin:0;display:flex;align-items:center;gap:8px;}
+.section-sub{font-size:12px;color:var(--text-dim);margin:2px 0 0;}
+.icon-chip{width:34px;height:34px;border-radius:10px;background:var(--card-2);display:flex;align-items:center;justify-content:center;color:var(--accent);flex:0 0 34px;}
+.icon-chip svg{width:18px;height:18px;}
+
+/* ===== CARDS ===== */
+.card{
+  background:var(--card);border:1px solid var(--border-soft);border-radius:var(--radius-lg);
+  box-shadow:var(--shadow);padding:14px;
+}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(min-width:640px){.grid-2{grid-template-columns:repeat(3,1fr);}}
+
+/* ===== TOP CONTROLS (Escala) ===== */
+.controls-card{margin-bottom:14px;}
+.date-row{display:flex;gap:10px;align-items:center;margin-bottom:12px;}
+.week-nav{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-bottom:12px;}
+.week-chip{
+  background:var(--card-2);border:1px solid var(--border);border-radius:10px;
+  padding:7px 2px;text-align:center;cursor:pointer;font-family:var(--font-body);
+}
+.week-chip .wc-day{display:block;font-size:10px;font-weight:800;color:var(--text-dim);letter-spacing:.3px;}
+.week-chip .wc-num{display:block;font-size:13px;font-weight:800;color:var(--text);margin-top:1px;}
+.week-chip.active{background:var(--accent);border-color:var(--accent);}
+.week-chip.active .wc-day, .week-chip.active .wc-num{color:#0e1116;}
+.week-chip.filled:not(.active)::after{content:'';display:block;width:5px;height:5px;border-radius:50%;background:var(--accent);margin:3px auto 0;}
+.date-input{
+  flex:1;background:var(--card-2);border:1px solid var(--border);border-radius:var(--radius-sm);
+  padding:10px 12px;color:var(--text);font-family:var(--font-body);font-size:14px;font-weight:600;
+}
+.mode-toggle{
+  display:flex;background:var(--card-2);border-radius:var(--radius-sm);padding:4px;gap:4px;margin-bottom:12px;
+}
+.mode-toggle button{
+  flex:1;border:none;background:none;padding:9px 6px;border-radius:8px;font-weight:700;font-size:12.5px;
+  color:var(--text-dim);cursor:pointer;font-family:var(--font-body);transition:all .2s ease;
+}
+.mode-toggle button.active{background:var(--accent);color:#0e1116;}
+.action-row{display:flex;gap:8px;flex-wrap:wrap;}
+.btn{
+  border:none;border-radius:12px;padding:11px 14px;font-family:var(--font-body);font-weight:700;
+  font-size:13px;cursor:pointer;display:flex;align-items:center;gap:7px;justify-content:center;
+  transition:transform .15s ease,filter .15s ease;
+}
+.btn:active{transform:scale(.96);}
+.btn svg{width:16px;height:16px;}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#0e1116;flex:1;min-width:150px;}
+.btn-outline{background:var(--card-2);color:var(--text);border:1px solid var(--border);flex:1;min-width:120px;}
+.btn-ghost{background:none;color:var(--accent);border:1px dashed var(--border);}
+.btn-danger{background:var(--danger);color:#fff;}
+.btn-sm{padding:7px 10px;font-size:11.5px;border-radius:9px;}
+.btn:disabled{opacity:.4;cursor:not-allowed;}
+
+/* function/escala cards */
+.func-card{
+  background:var(--card);border:1px solid var(--border-soft);border-radius:var(--radius-md);
+  padding:13px;box-shadow:var(--shadow);position:relative;overflow:hidden;
+}
+.func-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--fc,var(--accent));}
+.func-head{display:flex;align-items:center;gap:9px;margin-bottom:10px;}
+.func-icon{width:32px;height:32px;border-radius:9px;background:var(--fc-soft,var(--card-2));display:flex;align-items:center;justify-content:center;flex:0 0 32px;color:var(--fc,var(--accent));}
+.func-icon svg{width:17px;height:17px;}
+.func-name{font-weight:700;font-size:13.5px;line-height:1.2;}
+.func-select{
+  width:100%;background:var(--card-2);border:1px solid var(--border);border-radius:9px;
+  padding:9px 8px;color:var(--text);font-family:var(--font-body);font-weight:600;font-size:12.5px;
+}
+.func-assigned{
+  margin-top:9px;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-dim);
+}
+.avatar{
+  width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  color:#0e1116;font-weight:800;font-size:10.5px;display:flex;align-items:center;justify-content:center;flex:0 0 26px;
+}
+
+/* operator/nomes cards */
+.op-card{
+  background:var(--card);border:1px solid var(--border-soft);border-radius:var(--radius-md);
+  padding:13px;box-shadow:var(--shadow);position:relative;
+}
+.op-top{display:flex;align-items:center;gap:9px;margin-bottom:9px;}
+.op-avatar{
+  width:38px;height:38px;border-radius:12px;background:var(--card-2);color:var(--accent);
+  font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;flex:0 0 38px;
+  border:1px solid var(--border);
+}
+.op-name{font-weight:700;font-size:13.5px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.op-del{
+  width:26px;height:26px;border-radius:8px;border:none;background:var(--card-2);color:var(--text-dim);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;flex:0 0 26px;
+}
+.op-del svg{width:13px;height:13px;}
+.status-select{
+  width:100%;border-radius:9px;border:1px solid var(--border);padding:8px;font-weight:700;font-size:11.5px;
+  font-family:var(--font-body);
+}
+.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 9px;border-radius:20px;font-size:10.5px;font-weight:800;letter-spacing:.2px;}
+.badge-dot{width:6px;height:6px;border-radius:50%;}
+
+.add-bar{display:flex;gap:8px;margin-bottom:14px;}
+.add-bar input{
+  flex:1;background:var(--card-2);border:1px solid var(--border);border-radius:12px;
+  padding:11px 12px;color:var(--text);font-family:var(--font-body);font-size:13.5px;font-weight:600;
+}
+
+.empty-state{text-align:center;padding:40px 16px;color:var(--text-dim);}
+.empty-state svg{width:52px;height:52px;opacity:.35;margin-bottom:10px;}
+.empty-state p{font-size:13px;margin:0;}
+
+/* history */
+.hist-card{
+  background:var(--card);border:1px solid var(--border-soft);border-radius:var(--radius-md);
+  box-shadow:var(--shadow);padding:14px;margin-bottom:12px;
+}
+.hist-top{display:flex;align-items:center;justify-content:space-between;cursor:pointer;gap:10px;}
+.hist-date{font-weight:800;font-family:var(--font-display);font-size:15px;}
+.hist-meta{font-size:11px;color:var(--text-dim);font-family:var(--font-mono);margin-top:2px;}
+.hist-body{display:none;margin-top:12px;padding-top:12px;border-top:1px dashed var(--border);}
+.hist-body.open{display:block;}
+.hist-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;font-size:12.5px;border-bottom:1px solid var(--border-soft);}
+.hist-row:last-child{border-bottom:none;}
+.hist-actions{display:flex;gap:6px;}
+.chev{transition:transform .2s ease;color:var(--text-dim);}
+.chev.rot{transform:rotate(180deg);}
+
+/* chart */
+.chart-row{margin-bottom:16px;}
+.chart-op-name{font-weight:700;font-size:13px;margin-bottom:6px;display:flex;justify-content:space-between;}
+.chart-total{color:var(--text-dim);font-family:var(--font-mono);font-size:11px;}
+.stack-bar{display:flex;height:22px;border-radius:8px;overflow:hidden;background:var(--card-2);border:1px solid var(--border-soft);}
+.stack-seg{height:100%;transition:width .4s ease;}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 4px;}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:10.5px;color:var(--text-dim);font-weight:600;}
+.legend-sw{width:9px;height:9px;border-radius:3px;}
+
+/* modal */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;
+  z-index:100;padding:20px;backdrop-filter:blur(3px);
+}
+.modal-overlay.open{display:flex;}
+.modal-box{
+  background:var(--bg-alt);border-radius:var(--radius-lg);padding:20px;max-width:340px;width:100%;
+  box-shadow:0 20px 50px rgba(0,0,0,.4);border:1px solid var(--border);
+}
+.modal-box h3{margin:0 0 8px;font-family:var(--font-display);font-size:16px;}
+.modal-box p{margin:0 0 16px;font-size:13px;color:var(--text-dim);line-height:1.5;}
+.modal-actions{display:flex;gap:8px;}
+.modal-actions .btn{flex:1;}
+.fmt-choice{display:flex;gap:10px;margin-bottom:16px;}
+.fmt-opt{flex:1;border:2px solid var(--border);border-radius:12px;padding:14px 8px;text-align:center;cursor:pointer;font-weight:800;font-size:12px;}
+.fmt-opt.sel{border-color:var(--accent);color:var(--accent);background:var(--card-2);}
+
+/* toast */
+#toast{
+  position:fixed;bottom:calc(var(--nav-h) + 14px);left:50%;transform:translateX(-50%) translateY(20px);
+  background:var(--text);color:var(--bg);padding:11px 18px;border-radius:30px;font-size:12.5px;font-weight:700;
+  opacity:0;pointer-events:none;transition:all .3s ease;z-index:200;box-shadow:0 10px 24px rgba(0,0,0,.3);
+  display:flex;align-items:center;gap:8px;white-space:nowrap;
+}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* next day */
+.next-card{
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));border-radius:var(--radius-lg);
+  padding:16px;margin-bottom:16px;color:#0e1116;box-shadow:var(--shadow);
+}
+.next-card h3{margin:0 0 10px;font-family:var(--font-display);font-size:15px;display:flex;align-items:center;gap:7px;}
+.next-row{display:flex;justify-content:space-between;align-items:center;background:rgba(14,17,22,.12);border-radius:10px;padding:8px 10px;margin-bottom:6px;font-size:12.5px;font-weight:700;}
+.next-row:last-child{margin-bottom:0;}
+.next-empty{font-size:12.5px;font-weight:600;opacity:.85;}
+
+::-webkit-scrollbar{width:0;height:0;}
+</style>
+</head>
+<body data-theme="dark">
+
+<header id="topbar">
+  <div class="logo-mark">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M4 21V9l8-5 8 5v12" stroke="#0e1116" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 21v-6h6v6" stroke="#0e1116" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="11" r="1.6" fill="#0e1116"/></svg>
+  </div>
+  <div class="brand">
+    <h1>Operadores</h1>
+    <span id="devTag">Desenvolvido por Leandro Rocha</span>
+  </div>
+  <button class="theme-btn" id="themeBtn" title="Trocar tema"></button>
+</header>
+
+<main>
+
+  <!-- ESCALA -->
+  <section class="tab active" id="tab-escala">
+    <div class="section-head">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div class="icon-chip"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="17" rx="3" stroke="currentColor" stroke-width="2"/><path d="M3 9h18M8 2v4M16 2v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M8.5 14l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div>
+          <p class="section-title">Escala</p>
+          <p class="section-sub" id="escalaSub">Monte a escala do dia</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card controls-card">
+      <div class="date-row">
+        <input type="date" class="date-input" id="dateInput">
+      </div>
+      <div class="week-nav" id="weekNav"></div>
+      <div class="mode-toggle">
+        <button id="modeAuto" class="active">Automático</button>
+        <button id="modeManual">Manual</button>
+      </div>
+      <div class="action-row">
+        <button class="btn btn-primary" id="btnGerarSemana">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M21 2v6h-6M3 22v-6h6M3.5 9a9 9 0 0114.9-3.5L21 8M20.5 15a9 9 0 01-14.9 3.5L3 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Gerar semana (seg–sáb)
+        </button>
+        <button class="btn btn-outline" id="btnGerarDia">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 4v16M4 12h16" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+          Gerar só este dia
+        </button>
+        <button class="btn btn-outline" id="btnConfirmar">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Confirmar
+        </button>
+        <button class="btn btn-outline" id="btnShareWeek">
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="18" cy="5" r="3" stroke="currentColor" stroke-width="2"/><circle cx="6" cy="12" r="3" stroke="currentColor" stroke-width="2"/><circle cx="18" cy="19" r="3" stroke="currentColor" stroke-width="2"/><path d="M8.6 10.5l6.8-3.9M8.6 13.5l6.8 3.9" stroke="currentColor" stroke-width="2"/></svg>
+          Compartilhar semana
+        </button>
+        <button class="btn btn-outline" id="btnShareDay">
+          <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="17" rx="3" stroke="currentColor" stroke-width="2"/><path d="M3 9h18M8 2v4M16 2v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          Compartilhar só este dia
+        </button>
+      </div>
+    </div>
+
+    <div class="grid-2" id="escalaGrid"></div>
+    <div id="escalaEmpty"></div>
+  </section>
+
+  <!-- NOMES -->
+  <section class="tab" id="tab-nomes">
+    <div class="section-head">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div class="icon-chip"><svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3.4" stroke="currentColor" stroke-width="2"/><path d="M3 20c0-3.6 2.7-6 6-6s6 2.4 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="18" cy="8.5" r="2.6" stroke="currentColor" stroke-width="1.8"/><path d="M15.5 20c.2-3 2-5 4.5-5.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+        <div>
+          <p class="section-title">Operadores</p>
+          <p class="section-sub" id="nomesSub">Equipe e disponibilidade</p>
+        </div>
+      </div>
+    </div>
+    <div class="add-bar">
+      <input type="text" id="newOpInput" placeholder="Nome do novo operador">
+      <button class="btn btn-primary" id="btnAddOp" style="flex:0 0 auto;">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="grid-2" id="opGrid"></div>
+  </section>
+
+  <!-- FUNCOES -->
+  <section class="tab" id="tab-funcoes">
+    <div class="section-head">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div class="icon-chip"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="7" width="18" height="13" rx="2.5" stroke="currentColor" stroke-width="2"/><path d="M8 7V5.5A2.5 2.5 0 0110.5 3h3A2.5 2.5 0 0116 5.5V7" stroke="currentColor" stroke-width="2"/><path d="M3 12h18" stroke="currentColor" stroke-width="2"/></svg></div>
+        <div>
+          <p class="section-title">Funções</p>
+          <p class="section-sub">Postos de trabalho da escala</p>
+        </div>
+      </div>
+    </div>
+    <div class="add-bar">
+      <input type="text" id="newFnInput" placeholder="Nome da nova função">
+      <button class="btn btn-primary" id="btnAddFn" style="flex:0 0 auto;">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="grid-2" id="fnGrid"></div>
+  </section>
+
+  <!-- GRAFICO -->
+  <section class="tab" id="tab-grafico">
+    <div class="section-head">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div class="icon-chip"><svg viewBox="0 0 24 24" fill="none"><path d="M4 20V10M11 20V4M18 20v-7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></div>
+        <div>
+          <p class="section-title">Gráfico</p>
+          <p class="section-sub">Quantas vezes cada operador atuou em cada função</p>
+        </div>
+      </div>
+    </div>
+    <div class="card" id="legendCard"><div class="legend" id="legend"></div></div>
+    <div class="card" style="margin-top:12px;" id="chartCard"></div>
+  </section>
+
+  <!-- HISTORICO -->
+  <section class="tab" id="tab-historico">
+    <div class="section-head">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div class="icon-chip"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3.5 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div>
+          <p class="section-title">Histórico</p>
+          <p class="section-sub">Escalas salvas e o próximo dia</p>
+        </div>
+      </div>
+    </div>
+    <div id="nextDayBox"></div>
+    <div id="histList"></div>
+  </section>
+
+</main>
+
+<nav id="bottomnav">
+  <button class="nav-btn active" data-tab="escala">
+    <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="17" rx="3" stroke="currentColor" stroke-width="2"/><path d="M3 9h18M8 2v4M16 2v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    Escala
+  </button>
+  <button class="nav-btn" data-tab="nomes">
+    <svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3.4" stroke="currentColor" stroke-width="2"/><path d="M3 20c0-3.6 2.7-6 6-6s6 2.4 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="18" cy="8.5" r="2.6" stroke="currentColor" stroke-width="1.8"/></svg>
+    Nomes
+  </button>
+  <button class="nav-btn" data-tab="funcoes">
+    <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="7" width="18" height="13" rx="2.5" stroke="currentColor" stroke-width="2"/><path d="M8 7V5.5A2.5 2.5 0 0110.5 3h3A2.5 2.5 0 0116 5.5V7" stroke="currentColor" stroke-width="2"/></svg>
+    Funções
+  </button>
+  <button class="nav-btn" data-tab="grafico">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M4 20V10M11 20V4M18 20v-7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+    Gráfico
+  </button>
+  <button class="nav-btn" data-tab="historico">
+    <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3.5 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Histórico
+  </button>
+</nav>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box" id="modalBox"></div>
+</div>
+
+<div id="toast"></div>
+
+<canvas id="exportCanvas" style="display:none;"></canvas>
+
+<script>
+(function(){
+"use strict";
+
+/* ================= STORAGE ================= */
+const OP_KEY='operadores_app_operators_v1';
+const FN_KEY='operadores_app_functions_v1';
+const SCH_KEY='operadores_app_schedules_v1';
+const THEME_KEY='operadores_app_theme_v1';
+
+const STATUS = {
+  disponivel:{label:'Disponível', color:'#4fd18b'},
+  ausente:{label:'Ausente', color:'#ff6262'},
+  ferias:{label:'Férias', color:'#5ec8f5'},
+  folga:{label:'Folga', color:'#f5b942'},
+  ps:{label:'P.S.', color:'#c77dff'},
+  insumos:{label:'Insumos', color:'#ff9f5c'}
+};
+
+const FN_ICONS = [
+  '<path d="M4 20h16M6 20V9l6-5 6 5v11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
+  '<rect x="3" y="8" width="18" height="10" rx="2" stroke="currentColor" stroke-width="2"/><path d="M7 8V6a2 2 0 012-2h6a2 2 0 012 2v2" stroke="currentColor" stroke-width="2"/>',
+  '<path d="M3 12l4-8h10l4 8-4 8H7l-4-8z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>',
+  '<circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="2"/><path d="M12 8v4l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+  '<path d="M3 21l6-6M3 21v-5h5M21 3l-6 6M21 3v5h-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
+  '<rect x="4" y="4" width="16" height="16" rx="3" stroke="currentColor" stroke-width="2"/><path d="M8 4v16M4 8h16" stroke="currentColor" stroke-width="1.6"/>',
+  '<path d="M5 21V9l7-6 7 6v12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 21v-6h6v6" stroke="currentColor" stroke-width="2"/>',
+  '<path d="M12 2l2.5 6.5L21 11l-6.5 2.5L12 20l-2.5-6.5L3 11l6.5-2.5z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>'
+];
+const FN_COLOR_POOL = ['#5ee7c3','#8b7cf6','#ff8a5c','#5ec8f5','#f5b942','#ff6699','#d4a373','#e08bf0','#f56a6a','#7fd6ff'];
+
+function load(key, fallback){
+  try{ const raw = localStorage.getItem(key); return raw? JSON.parse(raw): fallback; }catch(e){ return fallback; }
+}
+function save(key, val){ try{ localStorage.setItem(key, JSON.stringify(val)); }catch(e){} }
+
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+
+function seedOperators(){
+  const names=['Leandro','Vanin','Marcão','Marquinhos','Núbia','Andrea','Edson','Luke','Duda'];
+  return names.map(n=>({id:uid(), name:n, status:'disponivel'}));
+}
+function seedFunctions(){
+  const names=['Empilhadeira','Separação','Conferência','Expedição','Reposição','Paletização'];
+  return names.map((n,i)=>({id:uid(), name:n, icon:i%FN_ICONS.length, color:FN_COLOR_POOL[i%FN_COLOR_POOL.length]}));
+}
+
+let operators = load(OP_KEY, null) || seedOperators();
+let functions = load(FN_KEY, null) || seedFunctions();
+let schedules = load(SCH_KEY, {});
+if(!load(OP_KEY,null)) save(OP_KEY, operators);
+if(!load(FN_KEY,null)) save(FN_KEY, functions);
+
+let theme = load(THEME_KEY, 'dark');
+document.body.setAttribute('data-theme', theme);
+
+/* current working state for Escala tab */
+let currentDate = todayISO();
+let currentMode = 'auto';
+let currentAssignments = {}; // functionId -> operatorId|null
+
+function todayISO(){
+  const d=new Date();
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function addDaysISO(iso, n){
+  const d=new Date(iso+'T00:00:00');
+  d.setDate(d.getDate()+n);
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function mondayOfWeek(iso){
+  const d=new Date(iso+'T00:00:00');
+  const day=d.getDay(); // 0=Dom,1=Seg,...6=Sáb
+  const diff = day===0 ? -6 : 1-day;
+  d.setDate(d.getDate()+diff);
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function fmtDateLong(iso){
+  const d=new Date(iso+'T00:00:00');
+  return d.toLocaleDateString('pt-BR',{weekday:'long', day:'2-digit', month:'long', year:'numeric'});
+}
+function fmtDateShort(iso){
+  const d=new Date(iso+'T00:00:00');
+  return d.toLocaleDateString('pt-BR',{day:'2-digit', month:'short', year:'numeric'});
+}
+function initials(name){
+  return name.trim().split(/\s+/).slice(0,2).map(w=>w[0]).join('').toUpperCase();
+}
+
+/* ================= THEME ================= */
+const THEME_ICONS = {
+  dark: '<svg viewBox="0 0 24 24" fill="none"><path d="M21 12.8A9 9 0 1111.2 3 7 7 0 0021 12.8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>',
+  light:'<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="2"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+  sand: '<svg viewBox="0 0 24 24" fill="none"><path d="M3 19c2-6 5-6 6-10 1 4 4 4 6 10M13 15c1-3 3-3 4-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 21h20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>'
+};
+function applyThemeIcon(){ document.getElementById('themeBtn').innerHTML = THEME_ICONS[theme]; }
+applyThemeIcon();
+document.getElementById('themeBtn').addEventListener('click', ()=>{
+  theme = theme==='dark' ? 'light' : theme==='light' ? 'sand' : 'dark';
+  document.body.setAttribute('data-theme', theme);
+  save(THEME_KEY, theme);
+  applyThemeIcon();
+  renderGrafico();
+});
+
+/* ================= TABS ================= */
+document.querySelectorAll('.nav-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-'+btn.dataset.tab).classList.add('active');
+    document.getElementById('tab-'+btn.dataset.tab).scrollTop = 0;
+    if(btn.dataset.tab==='grafico') renderGrafico();
+    if(btn.dataset.tab==='historico') renderHistorico();
+  });
+});
+function goToTab(name){
+  document.querySelector('.nav-btn[data-tab="'+name+'"]').click();
+}
+
+/* ================= MODAL ================= */
+function openModal(html){
+  document.getElementById('modalBox').innerHTML = html;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+function closeModal(){ document.getElementById('modalOverlay').classList.remove('open'); }
+document.getElementById('modalOverlay').addEventListener('click', e=>{
+  if(e.target.id==='modalOverlay') closeModal();
+});
+function confirmDialog(title, msg, onYes, yesLabel, danger){
+  openModal(
+    '<h3>'+title+'</h3><p>'+msg+'</p>'+
+    '<div class="modal-actions">'+
+      '<button class="btn btn-outline" id="modalCancel">Cancelar</button>'+
+      '<button class="btn '+(danger?'btn-danger':'btn-primary')+'" id="modalYes">'+(yesLabel||'Confirmar')+'</button>'+
+    '</div>'
+  );
+  document.getElementById('modalCancel').onclick = closeModal;
+  document.getElementById('modalYes').onclick = ()=>{ closeModal(); onYes(); };
+}
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(()=>t.classList.remove('show'), 2200);
+}
+
+/* ================= ESCALA ================= */
+function eligibleOperators(){
+  return operators.filter(o=>o.status==='disponivel');
+}
+function loadAssignmentsForDate(iso){
+  const saved = schedules[iso];
+  currentAssignments = {};
+  functions.forEach(f=>{ currentAssignments[f.id] = saved && saved.assignments ? (saved.assignments.find(a=>a.functionId===f.id)||{}).operatorId || null : null; });
+  currentMode = saved ? saved.mode : 'auto';
+  syncModeButtons();
+}
+function syncModeButtons(){
+  document.getElementById('modeAuto').classList.toggle('active', currentMode==='auto');
+  document.getElementById('modeManual').classList.toggle('active', currentMode==='manual');
+  document.getElementById('btnGerarSemana').style.display = currentMode==='auto' ? 'flex' : 'none';
+  document.getElementById('btnGerarDia').style.display = currentMode==='auto' ? 'flex' : 'none';
+}
+document.getElementById('modeAuto').addEventListener('click', ()=>{ currentMode='auto'; syncModeButtons(); });
+document.getElementById('modeManual').addEventListener('click', ()=>{ currentMode='manual'; syncModeButtons(); });
+
+document.getElementById('dateInput').addEventListener('change', e=>{
+  currentDate = e.target.value || todayISO();
+  loadAssignmentsForDate(currentDate);
+  renderEscala();
+});
+document.getElementById('dateInput').value = currentDate;
+loadAssignmentsForDate(currentDate);
+
+function renderWeekNav(){
+  const nav = document.getElementById('weekNav');
+  const monday = mondayOfWeek(currentDate);
+  const labels = ['SEG','TER','QUA','QUI','SEX','SÁB'];
+  nav.innerHTML='';
+  for(let d=0; d<6; d++){
+    const iso = addDaysISO(monday, d);
+    const day = new Date(iso+'T00:00:00').getDate();
+    const filled = !!(schedules[iso] && schedules[iso].assignments && schedules[iso].assignments.length);
+    const chip = document.createElement('div');
+    chip.className = 'week-chip'+(iso===currentDate?' active':'')+(filled?' filled':'');
+    chip.innerHTML = '<span class="wc-day">'+labels[d]+'</span><span class="wc-num">'+String(day).padStart(2,'0')+'</span>';
+    chip.addEventListener('click', ()=>{
+      currentDate = iso;
+      document.getElementById('dateInput').value = currentDate;
+      loadAssignmentsForDate(currentDate);
+      renderEscala();
+    });
+    nav.appendChild(chip);
+  }
+}
+
+document.getElementById('btnGerarSemana').addEventListener('click', ()=>{
+  const monday = mondayOfWeek(currentDate);
+  const weekDates = [0,1,2,3,4,5].map(n=>addDaysISO(monday,n));
+  const weekMap = generateWeekAssignments(weekDates);
+  weekDates.forEach(iso=>{
+    const assignments = functions.map(f=>({functionId:f.id, operatorId: (weekMap[iso]||{})[f.id]||null})).filter(a=>a.operatorId);
+    schedules[iso] = { mode:'auto', assignments, savedAt: new Date().toISOString() };
+  });
+  save(SCH_KEY, schedules);
+  loadAssignmentsForDate(currentDate);
+  renderEscala();
+  renderGrafico();
+  renderHistorico();
+  toast('Escala da semana gerada — cada operador sem repetir função');
+});
+document.getElementById('btnGerarDia').addEventListener('click', ()=>{
+  currentAssignments = generateAutoAssignments();
+  renderEscala();
+  toast('Escala de '+fmtDateShort(currentDate)+' gerada — toque em Confirmar para salvar');
+});
+function generateAutoAssignments(){
+  const pool = shuffle(eligibleOperators().map(o=>o.id));
+  const assign = {};
+  functions.forEach((f,i)=>{ assign[f.id] = pool[i] || null; });
+  return assign;
+}
+function generateWeekAssignments(weekDates){
+  const opIds = shuffle(eligibleOperators().map(o=>o.id));
+  const fnIds = functions.map(f=>f.id);
+  const O = opIds.length, F = fnIds.length;
+  const active = Math.min(O,F);
+  const map = {};
+  weekDates.forEach((iso,d)=>{
+    const assign = {};
+    for(let i=0;i<active;i++){
+      const opIndex = (i+d) % O;
+      assign[fnIds[i]] = opIds[opIndex];
+    }
+    map[iso] = assign;
+  });
+  return map;
+}
+function shuffle(arr){
+  const a=arr.slice();
+  for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+
+document.getElementById('btnConfirmar').addEventListener('click', ()=>{
+  const assignments = functions.map(f=>({functionId:f.id, operatorId: currentAssignments[f.id]||null})).filter(a=>a.operatorId);
+  if(assignments.length===0){ toast('Escolha ao menos um operador antes de confirmar'); return; }
+  schedules[currentDate] = { mode: currentMode, assignments, savedAt: new Date().toISOString() };
+  save(SCH_KEY, schedules);
+  toast('Escala de '+fmtDateShort(currentDate)+' confirmada');
+  renderWeekNav();
+  renderGrafico();
+  renderHistorico();
+});
+
+function openShareModal(scope){
+  const isWeek = scope==='week';
+  const title = isWeek ? 'Compartilhar escala da semana' : 'Compartilhar escala do dia';
+  const desc = isWeek
+    ? 'Escolha o formato da imagem para compartilhar a escala de segunda a sábado (semana de '+fmtDateShort(mondayOfWeek(currentDate))+').'
+    : 'Escolha o formato da imagem para compartilhar apenas a escala de '+fmtDateLong(currentDate)+'.';
+  openModal(
+    '<h3>'+title+'</h3><p>'+desc+'</p>'+
+    '<div class="fmt-choice">'+
+      '<div class="fmt-opt sel" id="fmtPng">PNG</div>'+
+      '<div class="fmt-opt" id="fmtJpg">JPG</div>'+
+    '</div>'+
+    '<div class="modal-actions">'+
+      '<button class="btn btn-outline" id="modalCancel">Cancelar</button>'+
+      '<button class="btn btn-primary" id="modalGo">Gerar imagem</button>'+
+    '</div>'
+  );
+  let fmt='png';
+  document.getElementById('fmtPng').onclick=()=>{ fmt='png'; document.getElementById('fmtPng').classList.add('sel'); document.getElementById('fmtJpg').classList.remove('sel'); };
+  document.getElementById('fmtJpg').onclick=()=>{ fmt='jpg'; document.getElementById('fmtJpg').classList.add('sel'); document.getElementById('fmtPng').classList.remove('sel'); };
+  document.getElementById('modalCancel').onclick = closeModal;
+  document.getElementById('modalGo').onclick = ()=>{ closeModal(); exportEscalaImage(fmt, scope); };
+}
+document.getElementById('btnShareWeek').addEventListener('click', ()=> openShareModal('week'));
+document.getElementById('btnShareDay').addEventListener('click', ()=> openShareModal('day'));
+
+function renderEscala(){
+  document.getElementById('escalaSub').textContent = fmtDateLong(currentDate);
+  renderWeekNav();
+  const grid = document.getElementById('escalaGrid');
+  const empty = document.getElementById('escalaEmpty');
+  grid.innerHTML='';
+  if(functions.length===0){
+    empty.innerHTML = emptyState('Nenhuma função cadastrada. Adicione funções na aba Funções.');
+    return;
+  }
+  empty.innerHTML='';
+  functions.forEach((f,idx)=>{
+    const color = f.color || FN_COLOR_POOL[idx%FN_COLOR_POOL.length];
+    const usedElsewhere = new Set(Object.entries(currentAssignments).filter(([fid])=>fid!==f.id).map(([,oid])=>oid).filter(Boolean));
+    const opts = eligibleOperators().filter(o=>!usedElsewhere.has(o.id));
+    const currentVal = currentAssignments[f.id];
+    const currentOp = operators.find(o=>o.id===currentVal);
+    let optionsHtml = '<option value="">— selecionar —</option>';
+    if(currentOp && !opts.find(o=>o.id===currentOp.id)) optionsHtml += '<option value="'+currentOp.id+'" selected>'+currentOp.name+'</option>';
+    opts.forEach(o=>{ optionsHtml += '<option value="'+o.id+'" '+(o.id===currentVal?'selected':'')+'>'+o.name+'</option>'; });
+
+    const card = document.createElement('div');
+    card.className='func-card';
+    card.style.setProperty('--fc', color);
+    card.style.setProperty('--fc-soft', color+'22');
+    card.innerHTML =
+      '<div class="func-head"><div class="func-icon"><svg viewBox="0 0 24 24" fill="none">'+FN_ICONS[f.icon%FN_ICONS.length]+'</svg></div><div class="func-name">'+f.name+'</div></div>'+
+      '<select class="func-select" data-fn="'+f.id+'">'+optionsHtml+'</select>'+
+      '<div class="func-assigned">'+
+        (currentOp ? '<div class="avatar" style="background:'+color+';color:#0e1116;">'+initials(currentOp.name)+'</div><span>'+currentOp.name+'</span>' : '<span>Sem operador definido</span>')+
+      '</div>';
+    grid.appendChild(card);
+  });
+  grid.querySelectorAll('.func-select').forEach(sel=>{
+    sel.addEventListener('change', ()=>{
+      currentAssignments[sel.dataset.fn] = sel.value || null;
+      renderEscala();
+    });
+  });
+}
+
+function emptyState(msg){
+  return '<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M9 10h.01M15 10h.01M8 16s1.5-2 4-2 4 2 4 2" stroke-linecap="round"/></svg><p>'+msg+'</p></div>';
+}
+
+/* ================= NOMES ================= */
+function renderNomes(){
+  const grid = document.getElementById('opGrid');
+  const sub = document.getElementById('nomesSub');
+  sub.textContent = operators.length+' operadores cadastrados';
+  grid.innerHTML='';
+  if(operators.length===0){ grid.innerHTML = emptyState('Nenhum operador cadastrado ainda.'); return; }
+  operators.forEach(o=>{
+    const st = STATUS[o.status] || STATUS.disponivel;
+    const card = document.createElement('div');
+    card.className='op-card';
+    card.innerHTML =
+      '<div class="op-top">'+
+        '<div class="op-avatar">'+initials(o.name)+'</div>'+
+        '<div class="op-name">'+o.name+'</div>'+
+        '<button class="op-del" data-id="'+o.id+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12" stroke-linecap="round"/></svg></button>'+
+      '</div>'+
+      '<select class="status-select" data-id="'+o.id+'" style="background:'+st.color+'22;border-color:'+st.color+';color:'+st.color+';">'+
+        Object.entries(STATUS).map(([k,v])=>'<option value="'+k+'" '+(k===o.status?'selected':'')+'>'+v.label+'</option>').join('')+
+      '</select>';
+    grid.appendChild(card);
+  });
+  grid.querySelectorAll('.status-select').forEach(sel=>{
+    sel.addEventListener('change', ()=>{
+      const op = operators.find(o=>o.id===sel.dataset.id);
+      op.status = sel.value;
+      save(OP_KEY, operators);
+      renderNomes();
+      renderEscala();
+      toast('Status de '+op.name+' atualizado');
+    });
+  });
+  grid.querySelectorAll('.op-del').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const op = operators.find(o=>o.id===btn.dataset.id);
+      confirmDialog('Excluir operador', 'Tem certeza que deseja excluir <b>'+op.name+'</b>? Essa ação não pode ser desfeita.', ()=>{
+        operators = operators.filter(o=>o.id!==op.id);
+        save(OP_KEY, operators);
+        renderNomes(); renderEscala(); renderGrafico();
+        toast('Operador removido');
+      }, 'Excluir', true);
+    });
+  });
+}
+document.getElementById('btnAddOp').addEventListener('click', addOperator);
+document.getElementById('newOpInput').addEventListener('keydown', e=>{ if(e.key==='Enter') addOperator(); });
+function addOperator(){
+  const inp = document.getElementById('newOpInput');
+  const name = inp.value.trim();
+  if(!name) return;
+  operators.push({id:uid(), name, status:'disponivel'});
+  save(OP_KEY, operators);
+  inp.value='';
+  renderNomes();
+  renderEscala();
+  toast('Operador adicionado');
+}
+
+/* ================= FUNCOES ================= */
+function renderFuncoes(){
+  const grid = document.getElementById('fnGrid');
+  grid.innerHTML='';
+  if(functions.length===0){ grid.innerHTML = emptyState('Nenhuma função cadastrada ainda.'); return; }
+  functions.forEach((f,idx)=>{
+    const color = f.color || FN_COLOR_POOL[idx%FN_COLOR_POOL.length];
+    const card = document.createElement('div');
+    card.className='func-card';
+    card.style.setProperty('--fc', color);
+    card.style.setProperty('--fc-soft', color+'22');
+    card.innerHTML =
+      '<div class="func-head">'+
+        '<div class="func-icon"><svg viewBox="0 0 24 24" fill="none">'+FN_ICONS[f.icon%FN_ICONS.length]+'</svg></div>'+
+        '<div class="func-name" style="flex:1;">'+f.name+'</div>'+
+        '<button class="op-del" data-id="'+f.id+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12" stroke-linecap="round"/></svg></button>'+
+      '</div>';
+    grid.appendChild(card);
+  });
+  grid.querySelectorAll('.op-del').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const f = functions.find(x=>x.id===btn.dataset.id);
+      confirmDialog('Excluir função', 'Tem certeza que deseja excluir <b>'+f.name+'</b>?', ()=>{
+        functions = functions.filter(x=>x.id!==f.id);
+        save(FN_KEY, functions);
+        renderFuncoes(); renderEscala(); renderGrafico();
+        toast('Função removida');
+      }, 'Excluir', true);
+    });
+  });
+}
+document.getElementById('btnAddFn').addEventListener('click', addFuncao);
+document.getElementById('newFnInput').addEventListener('keydown', e=>{ if(e.key==='Enter') addFuncao(); });
+function addFuncao(){
+  const inp = document.getElementById('newFnInput');
+  const name = inp.value.trim();
+  if(!name) return;
+  functions.push({id:uid(), name, icon:functions.length%FN_ICONS.length, color:FN_COLOR_POOL[functions.length%FN_COLOR_POOL.length]});
+  save(FN_KEY, functions);
+  inp.value='';
+  renderFuncoes();
+  renderEscala();
+  toast('Função adicionada');
+}
+
+/* ================= GRAFICO ================= */
+function renderGrafico(){
+  const legend = document.getElementById('legend');
+  legend.innerHTML = functions.map(f=>'<div class="legend-item"><span class="legend-sw" style="background:'+(f.color||'#5ee7c3')+';"></span>'+f.name+'</div>').join('');
+
+  const chartCard = document.getElementById('chartCard');
+  if(operators.length===0 || functions.length===0 || Object.keys(schedules).length===0){
+    chartCard.innerHTML = emptyState('Ainda não há escalas confirmadas para gerar o gráfico.');
+    return;
+  }
+  const counts = {}; // opId -> {fnId: n}
+  operators.forEach(o=> counts[o.id] = {});
+  Object.values(schedules).forEach(day=>{
+    (day.assignments||[]).forEach(a=>{
+      if(!counts[a.operatorId]) counts[a.operatorId]={};
+      counts[a.operatorId][a.functionId] = (counts[a.operatorId][a.functionId]||0)+1;
+    });
+  });
+  let html='';
+  operators.forEach(o=>{
+    const c = counts[o.id]||{};
+    const total = Object.values(c).reduce((a,b)=>a+b,0);
+    html += '<div class="chart-row"><div class="chart-op-name"><span>'+o.name+'</span><span class="chart-total">'+total+' escalas</span></div>';
+    if(total===0){
+      html += '<div class="stack-bar"></div>';
+    } else {
+      html += '<div class="stack-bar">';
+      functions.forEach((f)=>{
+        const n = c[f.id]||0;
+        if(n>0) html += '<div class="stack-seg" style="width:'+(n/total*100)+'%;background:'+(f.color||'#5ee7c3')+';" title="'+f.name+': '+n+'"></div>';
+      });
+      html += '</div>';
+    }
+    html += '</div>';
+  });
+  chartCard.innerHTML = html;
+}
+
+/* ================= HISTORICO ================= */
+function renderHistorico(){
+  // proximo dia
+  const tomorrow = addDaysISO(todayISO(), 1);
+  const nextBox = document.getElementById('nextDayBox');
+  const nd = schedules[tomorrow];
+  if(nd && nd.assignments && nd.assignments.length){
+    let rows = nd.assignments.map(a=>{
+      const op = operators.find(o=>o.id===a.operatorId);
+      const fn = functions.find(f=>f.id===a.functionId);
+      if(!op || !fn) return '';
+      return '<div class="next-row"><span>'+op.name+'</span><span>'+fn.name+'</span></div>';
+    }).join('');
+    nextBox.innerHTML = '<div class="next-card"><h3><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg> Próximo dia — '+fmtDateShort(tomorrow)+'</h3>'+rows+'</div>';
+  } else {
+    nextBox.innerHTML = '<div class="next-card"><h3><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg> Próximo dia — '+fmtDateShort(tomorrow)+'</h3><div class="next-empty">Ainda não há escala confirmada para amanhã.</div></div>';
+  }
+
+  const list = document.getElementById('histList');
+  const dates = Object.keys(schedules).sort((a,b)=> b.localeCompare(a));
+  if(dates.length===0){ list.innerHTML = emptyState('Nenhuma escala confirmada ainda. Vá até a aba Escala e confirme um dia.'); return; }
+  list.innerHTML='';
+  dates.forEach(iso=>{
+    const day = schedules[iso];
+    const card = document.createElement('div');
+    card.className='hist-card';
+    const rowsHtml = (day.assignments||[]).map(a=>{
+      const op = operators.find(o=>o.id===a.operatorId);
+      const fn = functions.find(f=>f.id===a.functionId);
+      return '<div class="hist-row"><span>'+(fn?fn.name:'—')+'</span><span>'+(op?op.name:'—')+'</span></div>';
+    }).join('') || '<div class="hist-row"><span>Sem registros</span></div>';
+    card.innerHTML =
+      '<div class="hist-top" data-open="'+iso+'">'+
+        '<div><div class="hist-date">'+fmtDateShort(iso)+'</div><div class="hist-meta">'+(day.assignments||[]).length+' funções · '+(day.mode==='manual'?'manual':'automático')+'</div></div>'+
+        '<div style="display:flex;align-items:center;gap:8px;">'+
+          '<button class="op-del" data-del="'+iso+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M9 7V5a2 2 0 012-2h2a2 2 0 012 2v2m-7 0v12a2 2 0 002 2h4a2 2 0 002-2V7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>'+
+          '<svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>'+
+        '</div>'+
+      '</div>'+
+      '<div class="hist-body" id="hb-'+iso+'">'+rowsHtml+'</div>';
+    list.appendChild(card);
+  });
+  list.querySelectorAll('[data-open]').forEach(el=>{
+    el.addEventListener('click', e=>{
+      if(e.target.closest('[data-del]')) return;
+      const iso = el.dataset.open;
+      document.getElementById('hb-'+iso).classList.toggle('open');
+      el.querySelector('.chev').classList.toggle('rot');
+    });
+  });
+  list.querySelectorAll('[data-del]').forEach(btn=>{
+    btn.addEventListener('click', e=>{
+      e.stopPropagation();
+      const iso = btn.dataset.del;
+      confirmDialog('Excluir do histórico', 'Excluir a escala de <b>'+fmtDateShort(iso)+'</b>? O gráfico será atualizado automaticamente.', ()=>{
+        delete schedules[iso];
+        save(SCH_KEY, schedules);
+        renderHistorico();
+        renderGrafico();
+        toast('Escala excluída do histórico');
+      }, 'Excluir', true);
+    });
+  });
+}
+
+/* ================= EXPORT IMAGE ================= */
+function roundRect(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.arcTo(x+w,y,x+w,y+h,r);
+  ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r);
+  ctx.arcTo(x,y,x+w,y,r);
+  ctx.closePath();
+}
+const EXPORT_PALETTES = {
+  dark:{ bgTop:'#151922', bgBottom:'#0e1116', card:'#1a1f2a', text:'#eef1f7', textDim:'#9aa4b8', line:'#2a3140', accent:'#5ee7c3', onAccent:'#0e1116' },
+  light:{ bgTop:'#ffffff', bgBottom:'#eef1f8', card:'#f7f9fd', text:'#1b2130', textDim:'#67728a', line:'#dbe1ee', accent:'#0ea472', onAccent:'#ffffff' },
+  sand:{ bgTop:'#faf3e6', bgBottom:'#efe2c8', card:'#fffaf0', text:'#3d3020', textDim:'#8a7860', line:'#e3d3ae', accent:'#b5702f', onAccent:'#fffaf0' }
+};
+
+function shade(hex, amt){
+  const c = hex.replace('#','');
+  let r=parseInt(c.substring(0,2),16), g=parseInt(c.substring(2,4),16), b=parseInt(c.substring(4,6),16);
+  r=Math.max(0,Math.min(255,r+amt)); g=Math.max(0,Math.min(255,g+amt)); b=Math.max(0,Math.min(255,b+amt));
+  return '#'+[r,g,b].map(v=>Math.round(v).toString(16).padStart(2,'0')).join('');
+}
+function isLightColor(hex){
+  const c = hex.replace('#','');
+  const r=parseInt(c.substring(0,2),16), g=parseInt(c.substring(2,4),16), b=parseInt(c.substring(4,6),16);
+  return (0.299*r+0.587*g+0.114*b)/255 > 0.62;
+}
+function mixColor(hexA, hexB, t){
+  const a=hexA.replace('#',''), b=hexB.replace('#','');
+  const ar=parseInt(a.substring(0,2),16), ag=parseInt(a.substring(2,4),16), ab=parseInt(a.substring(4,6),16);
+  const br=parseInt(b.substring(0,2),16), bg=parseInt(b.substring(2,4),16), bb=parseInt(b.substring(4,6),16);
+  const r=Math.round(ar+(br-ar)*t), g=Math.round(ag+(bg-ag)*t), bl=Math.round(ab+(bb-ab)*t);
+  return '#'+[r,g,bl].map(v=>v.toString(16).padStart(2,'0')).join('');
+}
+function fmtWeekdayLabel(iso){
+  const d = new Date(iso+'T00:00:00');
+  const s = d.toLocaleDateString('pt-BR',{weekday:'long'});
+  return s.charAt(0).toUpperCase()+s.slice(1);
+}
+function drawStar(ctx,cx,cy,r,color){
+  const spikes=5, inner=r*0.45;
+  ctx.beginPath();
+  for(let i=0;i<spikes*2;i++){
+    const rad = i%2===0 ? r : inner;
+    const ang = (Math.PI/spikes)*i - Math.PI/2;
+    const px=cx+Math.cos(ang)*rad, py=cy+Math.sin(ang)*rad;
+    i===0 ? ctx.moveTo(px,py) : ctx.lineTo(px,py);
+  }
+  ctx.closePath();
+  ctx.fillStyle=color; ctx.fill();
+}
+
+
+function colorForOperator(op){
+  let h=0;
+  for(let i=0;i<op.id.length;i++) h += op.id.charCodeAt(i);
+  return FN_COLOR_POOL[h % FN_COLOR_POOL.length];
+}
+
+function drawOperatorColumn(ctx,x,y,w,h,color,opName,rows){
+  const bg = mixColor(color,'#ffffff',0.88);
+  const ink = mixColor(color,'#000000',0.58);
+  const accent = mixColor(color,'#000000',0.12);
+  const border = mixColor(color,'#000000',0.10);
+
+  // sombra + fundo pastel da coluna
+  ctx.save();
+  ctx.shadowColor='rgba(0,0,0,.16)'; ctx.shadowBlur=16; ctx.shadowOffsetY=7;
+  ctx.fillStyle=bg; roundRect(ctx,x,y,w,h,22); ctx.fill();
+  ctx.restore();
+  ctx.fillStyle=bg; roundRect(ctx,x,y,w,h,22); ctx.fill();
+  ctx.lineWidth=2; ctx.strokeStyle=border;
+  roundRect(ctx,x+2,y+2,w-4,h-4,20); ctx.stroke();
+
+  // nome do operador
+  let nameSize=20;
+  ctx.font='800 '+nameSize+'px sans-serif';
+  const nameLabel=opName.toUpperCase();
+  while(ctx.measureText(nameLabel).width>w-24 && nameSize>12){
+    nameSize-=1; ctx.font='800 '+nameSize+'px sans-serif';
+  }
+  ctx.fillStyle=accent; ctx.textAlign='center'; ctx.textBaseline='alphabetic';
+  ctx.fillText(nameLabel, x+w/2, y+36);
+
+  // avatar
+  const cx=x+w/2, cy=y+96, r=32;
+  ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2);
+  ctx.fillStyle=color; ctx.fill();
+  ctx.lineWidth=3; ctx.strokeStyle=bg; ctx.stroke();
+  ctx.fillStyle = isLightColor(color) ? ink : '#ffffff';
+  ctx.font='800 24px sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillText(initials(opName), cx, cy+1);
+
+  // linha divisória
+  ctx.strokeStyle=border; ctx.lineWidth=1.4;
+  ctx.beginPath(); ctx.moveTo(x+18,cy+r+18); ctx.lineTo(x+w-18,cy+r+18); ctx.stroke();
+
+  const listTop = cy+r+38;
+
+  if(rows.length===1){
+    // destaque único (compartilhar só um dia)
+    const r0=rows[0];
+    ctx.fillStyle=color;
+    roundRect(ctx,cx-30,listTop,60,24,12); ctx.fill();
+    ctx.fillStyle='#ffffff'; ctx.font='800 12px sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(r0.day, cx, listTop+13);
+
+    let fnSize=21;
+    ctx.font='800 '+fnSize+'px sans-serif';
+    const fnLabel=(r0.label||'LIVRE').toUpperCase();
+    while(ctx.measureText(fnLabel).width>w-28 && fnSize>12){
+      fnSize-=1; ctx.font='800 '+fnSize+'px sans-serif';
+    }
+    ctx.fillStyle=ink; ctx.textAlign='center'; ctx.textBaseline='alphabetic';
+    ctx.fillText(fnLabel, cx, listTop+58);
+  } else {
+    const rowH=34;
+    rows.forEach((r0,i)=>{
+      const rowY = listTop + i*rowH;
+      ctx.fillStyle=color;
+      roundRect(ctx,x+16,rowY,36,22,8); ctx.fill();
+      ctx.fillStyle='#ffffff'; ctx.font='800 10.5px sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillText(r0.day, x+16+18, rowY+12);
+
+      let fnSize=12.5;
+      ctx.font='800 '+fnSize+'px sans-serif';
+      const fnLabel=(r0.label||'—').toUpperCase();
+      const maxW = w-16-36-10-14;
+      while(ctx.measureText(fnLabel).width>maxW && fnSize>8.5){
+        fnSize-=0.5; ctx.font='800 '+fnSize+'px sans-serif';
+      }
+      ctx.textAlign='left'; ctx.textBaseline='middle';
+      ctx.fillStyle = r0.label ? ink : mixColor(ink,'#ffffff',0.55);
+      ctx.fillText(fnLabel, x+16+36+10, rowY+12);
+    });
+  }
+}
+
+function drawStickerCard(ctx,x,y,w,h,color,index,fnName,opName,scale){
+  scale = scale || 1;
+  const S = n => n*scale;
+  const bg = mixColor(color,'#ffffff',0.90);
+  const bgSoft = mixColor(color,'#ffffff',0.80);
+  const ink = mixColor(color,'#000000',0.55);
+  const border = mixColor(color,'#000000',0.10);
+
+  // sombra suave
+  ctx.save();
+  ctx.shadowColor='rgba(0,0,0,.15)'; ctx.shadowBlur=S(14); ctx.shadowOffsetY=S(6);
+  ctx.fillStyle=bg;
+  roundRect(ctx,x,y,w,h,S(20)); ctx.fill();
+  ctx.restore();
+
+  // fundo do card (tom clarinho da mesma cor da função — combina com a fonte)
+  ctx.fillStyle=bg;
+  roundRect(ctx,x,y,w,h,S(20)); ctx.fill();
+
+  // borda suave no mesmo tom
+  ctx.lineWidth=S(2); ctx.strokeStyle=border;
+  roundRect(ctx,x+S(2),y+S(2),w-S(4),h-S(4),S(18)); ctx.stroke();
+
+  // numero pequeno no canto
+  ctx.fillStyle=color; ctx.font='800 '+S(12)+'px sans-serif'; ctx.textAlign='left'; ctx.textBaseline='middle';
+  ctx.fillText('Nº'+String(index).padStart(2,'0'), x+S(14), y+S(18));
+
+  // avatar
+  const cx=x+w/2, cy=y+S(58), r=S(36);
+  ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2);
+  ctx.fillStyle=color; ctx.fill();
+  ctx.lineWidth=S(3); ctx.strokeStyle=bg; ctx.stroke();
+  ctx.fillStyle = isLightColor(color) ? ink : '#ffffff';
+  ctx.font='800 '+S(24)+'px sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillText(initials(opName), cx, cy+1);
+
+  // nome — negrito, na cor combinando com o fundo
+  let nameSize = S(19);
+  ctx.font='800 '+nameSize+'px sans-serif';
+  while(ctx.measureText(opName).width > w-S(24) && nameSize>S(13)){
+    nameSize -= 1;
+    ctx.font='800 '+nameSize+'px sans-serif';
+  }
+  ctx.fillStyle=ink; ctx.textAlign='center'; ctx.textBaseline='alphabetic';
+  const nameY = cy+r+S(26);
+  ctx.fillText(opName, cx, nameY);
+
+  // etiqueta da função — mesma família de cor, contraste alto
+  let fnSize = S(14);
+  ctx.font='800 '+fnSize+'px sans-serif';
+  const label = fnName.toUpperCase();
+  while(ctx.measureText(label).width > w-S(22) && fnSize>S(10)){
+    fnSize -= 1;
+    ctx.font='800 '+fnSize+'px sans-serif';
+  }
+  const pillW = Math.min(w-S(16), ctx.measureText(label).width+S(26));
+  const pillH=S(28);
+  const pillX = cx-pillW/2, pillY = nameY+S(14);
+  ctx.fillStyle=bgSoft;
+  roundRect(ctx,pillX,pillY,pillW,pillH,S(14)); ctx.fill();
+  ctx.lineWidth=S(1.5); ctx.strokeStyle=color;
+  roundRect(ctx,pillX,pillY,pillW,pillH,S(14)); ctx.stroke();
+  ctx.fillStyle=ink; ctx.textBaseline='middle';
+  ctx.fillText(label, cx, pillY+pillH/2+1);
+}
+
+function exportEscalaImage(fmt, scope){
+  scope = scope || 'week';
+  if(functions.length===0 || operators.length===0){ toast('Cadastre operadores e funções antes de compartilhar'); return; }
+
+  const pal = EXPORT_PALETTES[theme] || EXPORT_PALETTES.dark;
+  let W, H, filename, shareTitle, shareText;
+  const SCALE = 2; // alta resolução
+
+  const canvas = document.getElementById('exportCanvas');
+  const ctx = canvas.getContext('2d');
+
+  // monta a lista de colunas (uma por operador) com as linhas de dia/função
+  let columns = [];
+  let headline, subline;
+
+  if(scope==='day'){
+    const dayAbbr = fmtWeekdayLabel(currentDate).slice(0,3).toUpperCase();
+    operators.forEach(op=>{
+      const fn = functions.find(f=>f.id===Object.keys(currentAssignments).find(fid=>currentAssignments[fid]===op.id));
+      if(fn) columns.push({ op, color: colorForOperator(op), rows:[{day:dayAbbr, label:fn.name}] });
+    });
+    if(columns.length===0){ toast('Monte a escala do dia antes de compartilhar'); return; }
+    filename = 'escala-dia-'+currentDate+'.'+(fmt==='jpg'?'jpg':'png');
+    shareTitle='Escala do dia'; shareText='Escala de '+fmtDateLong(currentDate)+' gerada pelo app Operadores';
+    headline='ESCALA DO DIA'; subline=fmtDateLong(currentDate);
+  } else {
+    const monday = mondayOfWeek(currentDate);
+    const weekDates = [0,1,2,3,4,5].map(n=>addDaysISO(monday,n)); // Segunda a Sábado
+    const dayAbbrs = ['SEG','TER','QUA','QUI','SEX','SÁB'];
+
+    const needsFill = weekDates.some(iso => !(schedules[iso] && schedules[iso].assignments && schedules[iso].assignments.length));
+    const fallbackMap = needsFill ? generateWeekAssignments(weekDates) : null;
+    const dayAssign = weekDates.map(iso=>{
+      const saved = schedules[iso];
+      if(saved && saved.assignments && saved.assignments.length) return saved.assignments;
+      const auto = (fallbackMap && fallbackMap[iso]) || {};
+      return functions.map(f=>({functionId:f.id, operatorId:auto[f.id]})).filter(a=>a.operatorId);
+    });
+
+    operators.forEach(op=>{
+      const rows = weekDates.map((iso,d)=>{
+        const a = dayAssign[d].find(a=>a.operatorId===op.id);
+        const fn = a ? functions.find(f=>f.id===a.functionId) : null;
+        return { day:dayAbbrs[d], label: fn ? fn.name : null };
+      });
+      if(rows.some(r=>r.label)) columns.push({ op, color: colorForOperator(op), rows });
+    });
+    if(columns.length===0){ toast('Monte a escala da semana antes de compartilhar'); return; }
+    filename = 'escala-semana-'+monday+'.'+(fmt==='jpg'?'jpg':'png');
+    shareTitle='Escala da semana'; shareText='Escala de segunda a sábado gerada pelo app Operadores';
+    headline='ESCALA DA SEMANA'; subline='Segunda a sábado · '+fmtDateShort(weekDates[0])+' a '+fmtDateShort(weekDates[5]);
+  }
+
+  const colsPerRow = Math.min(4, columns.length);
+  const colW=192, gap=16, margin=44;
+  const colH = scope==='day' ? 246 : 118 + Math.max(...columns.map(c=>c.rows.length))*34 + 20;
+  const gridW = colsPerRow*colW + (colsPerRow-1)*gap;
+  const rowsOfCols = Math.ceil(columns.length/colsPerRow);
+  const gridH = rowsOfCols*colH + (rowsOfCols-1)*gap;
+  const headH=150, footH=92;
+
+  W = gridW + margin*2;
+  H = headH + gridH + footH;
+
+  canvas.width = W*SCALE; canvas.height = H*SCALE;
+  ctx.setTransform(SCALE,0,0,SCALE,0,0);
+  ctx.imageSmoothingEnabled = true;
+  if('imageSmoothingQuality' in ctx) ctx.imageSmoothingQuality='high';
+
+  const bgGrad = ctx.createLinearGradient(0,0,0,H);
+  bgGrad.addColorStop(0,pal.bgTop); bgGrad.addColorStop(1,pal.bgBottom);
+  ctx.fillStyle=bgGrad; ctx.fillRect(0,0,W,H);
+
+  // header
+  ctx.fillStyle=pal.accent;
+  roundRect(ctx,margin,36,58,58,16); ctx.fill();
+  ctx.fillStyle=pal.onAccent; ctx.font='700 26px sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillText('⌂', margin+29, 66);
+
+  ctx.textAlign='left';
+  ctx.fillStyle=pal.text; ctx.font='800 30px sans-serif';
+  ctx.fillText(headline, margin+72, 56);
+  ctx.fillStyle=pal.textDim; ctx.font='600 15px sans-serif';
+  ctx.fillText(subline, margin+72, 82);
+
+  ctx.strokeStyle=pal.line; ctx.lineWidth=2;
+  ctx.setLineDash([8,6]);
+  ctx.beginPath(); ctx.moveTo(margin,headH-14); ctx.lineTo(W-margin,headH-14); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // colunas dos operadores
+  columns.forEach((c,i)=>{
+    const col = i%colsPerRow, rowIdx = Math.floor(i/colsPerRow);
+    const x = margin + col*(colW+gap);
+    const y = headH + rowIdx*(colH+gap);
+    drawOperatorColumn(ctx,x,y,colW,colH,c.color,c.op.name,c.rows);
+  });
+
+  const footY = headH+gridH+40;
+  ctx.strokeStyle=pal.line; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.moveTo(margin,footY); ctx.lineTo(W-margin,footY); ctx.stroke();
+  ctx.fillStyle=pal.textDim; ctx.font='600 15px sans-serif'; ctx.textAlign='left';
+  ctx.fillText('Desenvolvido por Leandro Rocha', margin, footY+34);
+  ctx.textAlign='right';
+  ctx.fillText(new Date().toLocaleString('pt-BR'), W-margin, footY+34);
+  ctx.textAlign='left';
+
+  const mime = fmt==='jpg' ? 'image/jpeg' : 'image/png';
+
+  canvas.toBlob(function(blob){
+    if(!blob){ toast('Não foi possível gerar a imagem'); return; }
+    const file = new File([blob], filename, {type:mime});
+    if(navigator.canShare && navigator.canShare({files:[file]})){
+      navigator.share({files:[file], title:shareTitle, text:shareText})
+        .catch(()=>{ downloadBlob(blob, filename); });
+    } else {
+      downloadBlob(blob, filename);
+    }
+  }, mime, fmt==='jpg' ? 0.98 : 1);
+}
+function downloadBlob(blob, filename){
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href=url; a.download=filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(url), 3000);
+  toast('Imagem salva: '+filename);
+}
+
+/* ================= INIT ================= */
+renderEscala();
+renderNomes();
+renderFuncoes();
+renderGrafico();
+renderHistorico();
+
+})();
+</script>
+</body>
+</html>
